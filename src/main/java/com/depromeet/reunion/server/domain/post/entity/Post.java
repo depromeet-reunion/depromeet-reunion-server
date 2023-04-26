@@ -6,19 +6,14 @@ import com.depromeet.reunion.server.domain.comment.entity.Comment;
 import com.depromeet.reunion.server.domain.post.dto.PostRequestDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "post")
 @SQLDelete(sql = "UPDATE post SET isDeleted = true WHERE id = ?")
 public class Post extends BaseEntity {
@@ -44,10 +39,22 @@ public class Post extends BaseEntity {
     private Board board;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
-    @OrderBy("id asc")
-//    @OrderBy('id asc')
-    private List<Comment> commentList = new ArrayList<>();
+    private List<ImageFile> imageFiles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OrderBy("id asc")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    private List<PostLike> postLikes= new ArrayList<>();
+
+    @Builder
+    public Post (String title, String content, Member member, Board board) {
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        this.board = board;
+    }
     public void updatePost(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();

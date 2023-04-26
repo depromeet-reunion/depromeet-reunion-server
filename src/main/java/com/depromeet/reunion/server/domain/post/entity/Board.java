@@ -2,11 +2,12 @@ package com.depromeet.reunion.server.domain.post.entity;
 
 import com.depromeet.reunion.server.domain.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "board")
 public class Board extends BaseEntity {
     @Id

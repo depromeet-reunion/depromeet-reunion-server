@@ -2,11 +2,12 @@ package com.depromeet.reunion.server.domain.member.entity;
 
 import com.depromeet.reunion.server.domain.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "member")
 public class Member extends BaseEntity {
 
@@ -19,7 +20,8 @@ public class Member extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private String part;
+    @Enumerated(EnumType.STRING)
+    private PartType part;
 
     @Column(nullable = false)
     private String unit;
