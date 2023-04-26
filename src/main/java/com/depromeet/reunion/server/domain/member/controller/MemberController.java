@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final PostService postService;
-    @GetMapping("/posts/{memberId}")
+    @GetMapping("/posts/me/{memberId}")
     public ResponseEntity<List<PostListResponseDto>> getMyPosts(@PathVariable("memberId") Long memberId) {
         return ResponseEntity.ok(postService.getMyPosts(memberId));
     }
