@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  redis:
+    container_name: deepromeet-redis
+    image: redis
+    command: redis-server --port 6379
+    hostname: redis
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    ports:
+      - "6379:6379"
+  postgres:
+    container_name: deepromeet-postgres
+    image: postgres
+    environment:
+      - POSTGRES_USER=deepromeet
+      - POSTGRES_PASSWORD=deepromeet
+      - POSTGRES_DB=deepromeet
+    hostname: postgres
+    labels:
+      - "name=postgres"
+      - "mode=standalone"
+    ports:
+      - "5432:5432"
