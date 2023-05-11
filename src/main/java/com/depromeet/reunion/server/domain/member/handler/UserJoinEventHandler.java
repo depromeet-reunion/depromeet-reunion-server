@@ -8,7 +8,6 @@ import com.slack.api.model.block.element.BlockElement;
 import com.slack.api.model.block.element.ButtonElement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -27,16 +26,13 @@ public class UserJoinEventHandler {
 
     private final SlackService slackService;
 
-    @Value(value = "${server.url}")
-    private String serverUrl;
-
-    @Value(value = "${slack.join-alert-channel}")
-    private String slackJoinAlertChannel;
-
     @EventListener
     @Async
     public void sendEvent(UserJoinEvent event) {
+        System.out.println("User Join Event Send to Slack");
+
         String title = "신규 유저가 가입하였습니다.";
+
 
         List<TextObject> textObjectList = new ArrayList<>();
         textObjectList.add(markdownText("*유저 이름:* " + event.getMember().getName()));
@@ -44,15 +40,42 @@ public class UserJoinEventHandler {
         textObjectList.add(markdownText("*유저 파트:* " + event.getMember().getMemberGroup().getPart()));
         textObjectList.add(markdownText("*유저 기수:* " + event.getMember().getMemberGroup().getUnit()));
 
+
+        String approveUrl = "http://localhost:8080/v1/slack/group/approve/" + event.getMember().getId();
+        String rejectUrl = "http://localhost:8080/v1/slack/group/reject/" + event.getMember().getId();
+
+        ButtonElement agreeButton = ButtonElement.builder()
+                .text(plainText("승인"))
+                .url(approveUrl)
+                .value("승인")
+                .build();
+
+        ButtonElement disagreeButton = ButtonElement.builder()
+                .text(plainText("거절"))
+                .url(rejectUrl)
+                .value("거절")
+                .build();
+
         List<BlockElement> blockElementList = new ArrayList<>();
+        blockElementList.add(agreeButton);
+        blockElementList.add(disagreeButton);
+
 
         List<LayoutBlock> blocks = asBlocks(
                 header(h -> h.text(plainText(title))),
-                section(section -> section.fields(textObjectList)),
-                actions(a -> a.elements(blockElementList))
+                section(
+                        section -> section.fields(textObjectList)
+                ),
+                actions(
+                        a -> a.elements(blockElementList)
+                )
         );
 
-        slackService.sendMessage(blocks, slackJoinAlertChannel);
+        log.info("blocks: {}", blocks);
+        log.info("send to slack");
+
+        slackService.sendMessage(blocks, "#test-channel");
+
     }
 
 }

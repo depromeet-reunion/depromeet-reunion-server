@@ -1,11 +1,13 @@
 package com.depromeet.reunion.server.domain.member.service;
 
-import com.depromeet.reunion.server.auth.model.dto.resonse.JwtTokenResponseDto;
+import com.depromeet.reunion.server.auth.model.dto.request.SignupRequestDto;
+import com.depromeet.reunion.server.auth.repository.AuthResultRepository;
 import com.depromeet.reunion.server.domain.member.event.UserJoinEvent;
-import com.depromeet.reunion.server.domain.member.model.dto.request.SignupRequestDto;
-import com.depromeet.reunion.server.domain.member.model.entity.Member;
-import com.depromeet.reunion.server.domain.member.model.entity.MemberAuth;
-import com.depromeet.reunion.server.domain.member.model.entity.MemberGroup;
+import com.depromeet.reunion.server.domain.member.model.Member;
+import com.depromeet.reunion.server.domain.member.model.MemberAuth;
+import com.depromeet.reunion.server.domain.member.model.MemberGroup;
+import com.depromeet.reunion.server.domain.member.model.MemberStatus;
+import com.depromeet.reunion.server.domain.member.model.dto.response.SignUpResponseDto;
 import com.depromeet.reunion.server.domain.member.repository.MemberAuthRepository;
 import com.depromeet.reunion.server.domain.member.repository.MemberGroupRepository;
 import com.depromeet.reunion.server.domain.member.repository.MemberRepository;
@@ -25,12 +27,17 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberAuthRepository memberAuthRepository;
     private final MemberGroupRepository memberGroupRepository;
+    private final AuthResultRepository authResultRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public JwtTokenResponseDto signUp(SignupRequestDto signupRequestDto) {
+    public SignUpResponseDto signUp(SignupRequestDto signupRequestDto) {
+        authResultRepository.findById(signupRequestDto.getPhoneNumber()).orElseThrow(
+                () -> new BusinessException(ErrorCode.UNAUTHORIZED_PHONE_NUMBER)
+        );
+
         memberRepository.findByPhoneNumber(signupRequestDto.getPhoneNumber()).ifPresent(
                 member -> {
                     throw new BusinessException(ErrorCode.ALREADY_EXIST_USER);
@@ -54,6 +61,7 @@ public class MemberService {
                 .name(signupRequestDto.getName())
                 .memberAuth(memberAuth)
                 .memberGroup(memberGroup)
+                .status(MemberStatus.WAITING)
                 .build();
 
 
@@ -65,6 +73,6 @@ public class MemberService {
         String accessToken = jwtTokenProvider.createAccessToken(member.getId().toString());
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getId().toString());
 
-        return new JwtTokenResponseDto(accessToken, refreshToken);
+        return new SignUpResponseDto(accessToken, refreshToken);
     }
 }

@@ -1,5 +1,7 @@
 package com.depromeet.reunion.server.global.security.provider;
 
+import com.depromeet.reunion.server.global.exception.BusinessException;
+import com.depromeet.reunion.server.global.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,8 +33,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             return new UsernamePasswordAuthenticationToken(userDetails, null, null);
         } else {
-            throw new AuthenticationException("Invalid password") {
-            };
+            throw new BusinessException(ErrorCode.PHONE_NUMBER_OR_PASSWORD_NOT_MATCHED);
         }
 
     }

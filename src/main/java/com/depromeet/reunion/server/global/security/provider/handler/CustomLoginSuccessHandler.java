@@ -1,6 +1,6 @@
 package com.depromeet.reunion.server.global.security.provider.handler;
 
-import com.depromeet.reunion.server.auth.model.dto.resonse.JwtTokenResponseDto;
+import com.depromeet.reunion.server.auth.model.dto.resonse.LoginResponseDto;
 import com.depromeet.reunion.server.global.security.provider.SecurityUserDetails;
 import com.depromeet.reunion.server.global.security.token.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,9 +26,9 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String accessToken = jwtTokenProvider.createAccessToken(id);
         String refreshToken = jwtTokenProvider.createRefreshToken(id);
-        var loginResult = new JwtTokenResponseDto(accessToken, refreshToken);
+        var loginResult = new LoginResponseDto(accessToken, refreshToken);
         response.setContentType("application/json");
-        response.setStatus(HttpStatus.OK.value());
+        response.setStatus(HttpStatus.CREATED.value());
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(loginResult));
     }

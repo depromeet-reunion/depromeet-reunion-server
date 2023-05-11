@@ -19,6 +19,9 @@ public class SecurityUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
         return memberRepository.findByPhoneNumber(phoneNumber).map(SecurityUserDetails::new)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found"));
+                {
+                    System.out.println("User not found" + phoneNumber);
+                    return new UsernameNotFoundException("User not found");
+                });
     }
 }

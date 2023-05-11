@@ -20,6 +20,7 @@ public class SlackService {
     @Value(value = "${slack.token}")
     private String token;
 
+
     @Async
     public void sendMessage(List<LayoutBlock> blocks, String channel) {
         try {
@@ -32,5 +33,6 @@ public class SlackService {
         } catch (SlackApiException | IOException e) {
             log.error("Failed to send a Slack message: {}", e.getMessage());
         }
+
     }
 }
