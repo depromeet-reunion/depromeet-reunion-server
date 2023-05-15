@@ -1,6 +1,6 @@
 package com.depromeet.reunion.server.domain.member.controller;
 
-import com.depromeet.reunion.server.domain.post.dto.PostListResponseDto;
+import com.depromeet.reunion.server.domain.post.dto.response.PostListResponseDto;
 import com.depromeet.reunion.server.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
