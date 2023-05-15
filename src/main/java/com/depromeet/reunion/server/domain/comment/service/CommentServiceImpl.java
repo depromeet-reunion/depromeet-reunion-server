@@ -1,7 +1,7 @@
 package com.depromeet.reunion.server.domain.comment.service;
 
-import com.depromeet.reunion.server.domain.comment.dto.CommentRequestDto;
-import com.depromeet.reunion.server.domain.comment.dto.CommentResponseDto;
+import com.depromeet.reunion.server.domain.comment.dto.request.CommentRequestDto;
+import com.depromeet.reunion.server.domain.comment.dto.response.CommentResponseDto;
 import com.depromeet.reunion.server.domain.comment.entity.Comment;
 import com.depromeet.reunion.server.domain.comment.repository.CommentRepository;
 import com.depromeet.reunion.server.domain.member.entity.Member;
@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService{
         // postId 있는지 확인
         findPost(postId);
         List<Comment> comments = commentRepository.findByPostId(postId);
-        return comments.stream().map(CommentResponseDto::of).collect(Collectors.toList());
+        return comments.stream().map(CommentResponseDto::fromEntity).collect(Collectors.toList());
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CommentServiceImpl implements CommentService{
         Post post = findPost(postId);
         Member member = findMember(memberId);
         Comment comment = commentRepository.save(commentRequestDto.toEntity(post, member));
-        return CommentResponseDto.of(comment);
+        return CommentResponseDto.fromEntity(comment);
     }
 
     private Post findPost(Long postId) {

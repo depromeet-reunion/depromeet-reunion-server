@@ -1,14 +1,11 @@
-package com.depromeet.reunion.server.domain.comment.dto;
+package com.depromeet.reunion.server.domain.comment.dto.response;
 
 import com.depromeet.reunion.server.domain.comment.entity.Comment;
-import com.depromeet.reunion.server.domain.member.dto.MemberSimpleResponseDto;
-import com.depromeet.reunion.server.domain.member.entity.Member;
+import com.depromeet.reunion.server.domain.member.dto.MemberResponseDto;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Builder
@@ -16,14 +13,14 @@ public class CommentResponseDto {
     private Long id;
     private String content;
     private LocalDateTime createdAt;
-    private MemberSimpleResponseDto member;
+    private MemberResponseDto member;
 
-    public static CommentResponseDto of(Comment comment) {
+    public static CommentResponseDto fromEntity(Comment comment) {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())
-                .member(MemberSimpleResponseDto.of(comment.getMember()))
+                .member(MemberResponseDto.fromEntity(comment.getMember()))
                 .build();
     }
 }

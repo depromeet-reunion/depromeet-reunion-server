@@ -1,4 +1,4 @@
-package com.depromeet.reunion.server.domain.post.dto;
+package com.depromeet.reunion.server.domain.post.dto.response;
 
 import com.depromeet.reunion.server.domain.post.entity.Board;
 import lombok.Getter;
@@ -7,7 +7,6 @@ import lombok.Getter;
 public class BoardResponseDto {
     private Long id;
     private String boardName;
-
 
     public BoardResponseDto(Board board) {
         this.id = board.getId();
