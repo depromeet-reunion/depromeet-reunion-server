@@ -6,22 +6,15 @@ import lombok.*;
 
 @Getter
 @Builder
-public class MemberSimpleResponseDto {
+public class MemberResponseDto {
     private Long id;
     private String name;
     private PartType part;
     private String unit;
 
-//    public MemberSimpleResponseDto(Member member) {
-//        this.id = member.getId();
-//        this.name = member.getName();
-//        this.part = member.getPart();
-//        this.unit = member.getUnit();
-//    }
-
     // builder 패턴 사용
-    public static MemberSimpleResponseDto of (Member member) {
-        return MemberSimpleResponseDto.builder()
+    public static MemberResponseDto fromEntity(Member member) {
+        return MemberResponseDto.builder()
                 .id(member.getId())
                 .name(member.getName())
                 .part(member.getPart())

@@ -1,4 +1,4 @@
-package com.depromeet.reunion.server.domain.comment.dto;
+package com.depromeet.reunion.server.domain.comment.dto.request;
 
 import com.depromeet.reunion.server.domain.comment.entity.Comment;
 import com.depromeet.reunion.server.domain.member.entity.Member;

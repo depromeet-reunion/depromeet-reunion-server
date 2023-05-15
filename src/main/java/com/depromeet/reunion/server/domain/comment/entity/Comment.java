@@ -1,6 +1,5 @@
 package com.depromeet.reunion.server.domain.comment.entity;
-
-import com.depromeet.reunion.server.domain.common.BaseEntity;
+import com.depromeet.reunion.server.domain.common.BaseTimeEntity;
 import com.depromeet.reunion.server.domain.member.entity.Member;
 import com.depromeet.reunion.server.domain.post.entity.Post;
 import jakarta.persistence.*;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity(name = "comment")
-public class Comment extends BaseEntity {
+public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -20,7 +19,8 @@ public class Comment extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
+    @Column
+    protected boolean deleted;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
