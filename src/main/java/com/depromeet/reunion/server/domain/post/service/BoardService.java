@@ -1,6 +1,6 @@
 package com.depromeet.reunion.server.domain.post.service;
 
-import com.depromeet.reunion.server.domain.post.dto.BoardResponseDto;
+import com.depromeet.reunion.server.domain.post.dto.response.BoardResponseDto;
 
 import java.util.List;
 

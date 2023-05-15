@@ -1,7 +1,7 @@
 package com.depromeet.reunion.server.domain.comment.service;
 
-import com.depromeet.reunion.server.domain.comment.dto.CommentRequestDto;
-import com.depromeet.reunion.server.domain.comment.dto.CommentResponseDto;
+import com.depromeet.reunion.server.domain.comment.dto.request.CommentRequestDto;
+import com.depromeet.reunion.server.domain.comment.dto.response.CommentResponseDto;
 
 import java.util.List;
 
