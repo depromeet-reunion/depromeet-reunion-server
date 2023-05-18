@@ -1,7 +1,7 @@
 package com.depromeet.reunion.server.global.security.filter;
 
-import com.depromeet.reunion.server.domain.member.model.Member;
 import com.depromeet.reunion.server.domain.member.model.MemberStatus;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.member.repository.MemberRepository;
 import com.depromeet.reunion.server.global.exception.BusinessException;
 import com.depromeet.reunion.server.global.exception.ErrorCode;
@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             var id = jwtTokenUtil.getId(token);
 
-            Member member = memberRepository.findById(Long.valueOf(id)).orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+            Member member = memberRepository.findById(Long.valueOf(id)).orElseThrow(() -> new BusinessException(ErrorCode.NOT_VALID_MEMBER));
             if (member.getStatus() == MemberStatus.WAITING) {
                 throw new BusinessException(ErrorCode.WAITING_MEMBER_ERROR);
             } else if (member.getStatus() == MemberStatus.REJECTED) {

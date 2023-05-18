@@ -48,10 +48,7 @@ public class SmsService {
             final String timestamp = String.valueOf(System.currentTimeMillis());
             var signature = makeSignature(url, timestamp, accessKey, secretKey);
 
-            OkHttpClient client = new OkHttpClient().newBuilder()
-                    .build();
-            MediaType mediaType = MediaType.valueOf(MediaType.APPLICATION_JSON_VALUE);
-            //request body
+            OkHttpClient client = new OkHttpClient().newBuilder().build();
             RequestBody body = RequestBody.create(content, okhttp3.MediaType.parse(MediaType.APPLICATION_JSON_VALUE));
 
             Request request = new Request.Builder()
@@ -65,7 +62,6 @@ public class SmsService {
                     .build();
             Response response = client.newCall(request).execute();
 
-
         } catch (NoSuchAlgorithmException | InvalidKeyException | IOException e) {
             log.error("Failed to send a SMS message: {}", e.getMessage());
         }
@@ -73,21 +69,17 @@ public class SmsService {
     }
 
 
-    public String makeSignature(String url, String timestamp, String accessKey, String secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
+    private String makeSignature(String url, String timestamp, String accessKey, String secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
+        String SIGNING_ALGORITHM = "HmacSHA256";
         String space = " ";
         String newLine = "\n";
         String method = "POST";
 
-        String message = method +
-                space +
-                url +
-                newLine +
-                timestamp +
-                newLine +
-                accessKey;
+        String message = method + space + url + newLine + timestamp + newLine + accessKey;
 
-        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-        Mac mac = Mac.getInstance("HmacSHA256");
+
+        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), SIGNING_ALGORITHM);
+        Mac mac = Mac.getInstance(SIGNING_ALGORITHM);
         mac.init(signingKey);
 
         byte[] rawHmac = mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
