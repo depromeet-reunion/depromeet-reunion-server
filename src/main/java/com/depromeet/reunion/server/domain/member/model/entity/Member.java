@@ -1,7 +1,11 @@
-package com.depromeet.reunion.server.domain.member.model;
+package com.depromeet.reunion.server.domain.member.model.entity;
 
+import com.depromeet.reunion.server.domain.member.model.MemberStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Builder
@@ -11,17 +15,17 @@ import lombok.*;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(nullable = false)
     private MemberAuth memberAuth;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(nullable = false)
     private MemberGroup memberGroup;
 

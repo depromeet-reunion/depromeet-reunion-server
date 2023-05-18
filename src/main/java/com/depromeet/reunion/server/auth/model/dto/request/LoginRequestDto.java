@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class LoginRequestDto {
-
     private String phoneNumber;
     private String password;
 }

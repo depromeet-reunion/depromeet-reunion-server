@@ -1,12 +1,13 @@
-package com.depromeet.reunion.server.domain.member.model;
+package com.depromeet.reunion.server.domain.member.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
 import java.time.LocalDateTime;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Builder
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 public class MemberAuth {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     private String phoneNumber;

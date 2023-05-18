@@ -1,6 +1,6 @@
 package com.depromeet.reunion.server.global.security.provider;
 
-import com.depromeet.reunion.server.domain.member.model.Member;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

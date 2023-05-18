@@ -14,7 +14,6 @@ import com.depromeet.reunion.server.global.exception.ErrorCode;
 import com.depromeet.reunion.server.infra.ncp.SmsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 
@@ -25,13 +24,24 @@ public class SmsAuthService {
     private static final int RESEND_LIMIT_SECOND = 150;
     private static final int EXPIRED_TIME = 180;
     private static final int AUTH_EXPIRED_TIME = 43200;
+
     private final AuthCodeRepository authCodeRepository;
     private final AuthResultRepository authResultRepository;
     private final SmsService smsService;
 
-    public SmsAuthSendResponseDto smsAuthSend(@RequestBody SmsAuthRequestDto smsAuthRequestDto) {
+    /**
+     * This method send sms auth code to user's phone number.
+     * <p> If auth code is already exist, then check expired time.
+     * <p> Prevent send message if EXPIRED_TIME seconds have not passed since the previous request.
+     * <p> Create Random Auth Code and send message to smsAuthRequestDto phone number.
+     * <p> Save auth code to redis - add expired time to EXPIRED_TIME seconds.
+     *
+     * @param smsAuthRequestDto phone number
+     **/
+    public SmsAuthSendResponseDto smsAuthSend(SmsAuthRequestDto smsAuthRequestDto) {
+        String phoneNumber = smsAuthRequestDto.getPhoneNumber();
 
-        authCodeRepository.findById(smsAuthRequestDto.getPhoneNumber()).ifPresent(
+        authCodeRepository.findById(phoneNumber).ifPresent(
                 authCode -> {
                     if (authCode.getExpiredTime() > RESEND_LIMIT_SECOND) {
                         throw new BusinessException(ErrorCode.AUTH_CODE_RETRY_TIME);
@@ -42,10 +52,10 @@ public class SmsAuthService {
         var authCode = AuthCodeProvider.createRandomAuthCode();
         var message = createAuthMessage(authCode);
 
-        smsService.sendMessage(smsAuthRequestDto.getPhoneNumber(), message);
+        smsService.sendMessage(phoneNumber, message);
 
         AuthCode authcode = AuthCode.builder()
-                .key(smsAuthRequestDto.getPhoneNumber())
+                .key(phoneNumber)
                 .value(authCode)
                 .expiredTime(EXPIRED_TIME).build();
 
@@ -54,24 +64,43 @@ public class SmsAuthService {
         return new SmsAuthSendResponseDto("Success", getExpiredTime());
     }
 
-    public AuthVerifyResultDto smsAuthVerify(@RequestBody SmsAuthVerifyRequestDto smsAuthVerifyRequestDto) {
-        AuthCode authCode = authCodeRepository.findById(smsAuthVerifyRequestDto.getPhoneNumber()).orElseThrow(
-                () -> new BusinessException(ErrorCode.NOT_MATCH_AUTH_CODE)
-        );
-        boolean result = authCode.getValue().equals(smsAuthVerifyRequestDto.getAuthCode());
-        if (result) {
+    /**
+     * This Method check auth code by user's phone number.
+     * <p> If auth code is not exist, then throw NOT_MATCH_AUTH_CODE exception.
+     * <p> If auth code is exist, then check auth code is same.
+     *
+     * @param smsAuthVerifyRequestDto phone number, auth code
+     * @return AuthVerifyResultDto
+     */
+    public AuthVerifyResultDto smsAuthVerify(SmsAuthVerifyRequestDto smsAuthVerifyRequestDto) {
+        AuthCode authCode = authCodeRepository.findById(smsAuthVerifyRequestDto.getPhoneNumber())
+                .orElseThrow(() -> new BusinessException(ErrorCode.AUTH_CODE_SEND_REQUIRED));
+
+        if (authCode.getValue().equals(smsAuthVerifyRequestDto.getAuthCode())) {
             AuthResult authResult = AuthResult.builder().key(authCode.getKey()).value(authCode.getValue()).expiredTime(AUTH_EXPIRED_TIME).build();
             authResultRepository.save(authResult);
+            return new AuthVerifyResultDto(true);
         } else {
-            throw new BusinessException(ErrorCode.NOT_MATCH_AUTH_CODE);
+            return new AuthVerifyResultDto(false);
         }
-        return new AuthVerifyResultDto(true);
     }
 
+    /**
+     * This method create auth message.
+     *
+     * @param authCode auth code
+     * @return String
+     */
     private String createAuthMessage(String authCode) {
         return "[DEEPROMEET] 인증번호: " + authCode + " 인증번호를 입력해 주세요. ";
     }
 
+
+    /**
+     * This method return expired time.
+     *
+     * @return LocalDateTime
+     */
     private LocalDateTime getExpiredTime() {
         return LocalDateTime.now().plusSeconds(SmsAuthService.EXPIRED_TIME);
     }

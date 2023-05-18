@@ -1,13 +1,13 @@
 package com.depromeet.reunion.server.domain.member.service;
 
-import com.depromeet.reunion.server.auth.model.dto.request.SignupRequestDto;
+import com.depromeet.reunion.server.auth.model.dto.resonse.JwtTokenResponseDto;
 import com.depromeet.reunion.server.auth.repository.AuthResultRepository;
 import com.depromeet.reunion.server.domain.member.event.UserJoinEvent;
-import com.depromeet.reunion.server.domain.member.model.Member;
-import com.depromeet.reunion.server.domain.member.model.MemberAuth;
-import com.depromeet.reunion.server.domain.member.model.MemberGroup;
 import com.depromeet.reunion.server.domain.member.model.MemberStatus;
-import com.depromeet.reunion.server.domain.member.model.dto.response.SignUpResponseDto;
+import com.depromeet.reunion.server.domain.member.model.dto.request.SignupRequestDto;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
+import com.depromeet.reunion.server.domain.member.model.entity.MemberAuth;
+import com.depromeet.reunion.server.domain.member.model.entity.MemberGroup;
 import com.depromeet.reunion.server.domain.member.repository.MemberAuthRepository;
 import com.depromeet.reunion.server.domain.member.repository.MemberGroupRepository;
 import com.depromeet.reunion.server.domain.member.repository.MemberRepository;
@@ -33,7 +33,7 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public SignUpResponseDto signUp(SignupRequestDto signupRequestDto) {
+    public JwtTokenResponseDto signUp(SignupRequestDto signupRequestDto) {
         authResultRepository.findById(signupRequestDto.getPhoneNumber()).orElseThrow(
                 () -> new BusinessException(ErrorCode.UNAUTHORIZED_PHONE_NUMBER)
         );
@@ -73,6 +73,6 @@ public class MemberService {
         String accessToken = jwtTokenProvider.createAccessToken(member.getId().toString());
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getId().toString());
 
-        return new SignUpResponseDto(accessToken, refreshToken);
+        return new JwtTokenResponseDto(accessToken, refreshToken);
     }
 }

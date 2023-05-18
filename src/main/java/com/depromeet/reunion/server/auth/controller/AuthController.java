@@ -5,6 +5,7 @@ import com.depromeet.reunion.server.auth.model.dto.request.SmsAuthVerifyRequestD
 import com.depromeet.reunion.server.auth.model.dto.resonse.AuthVerifyResultDto;
 import com.depromeet.reunion.server.auth.model.dto.resonse.SmsAuthSendResponseDto;
 import com.depromeet.reunion.server.auth.service.SmsAuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,14 +23,14 @@ public class AuthController {
 
     @PostMapping("/sms/send")
     @ResponseBody
-    public ResponseEntity<SmsAuthSendResponseDto> smsAuth(@RequestBody SmsAuthRequestDto smsAuthRequestDto) {
+    public ResponseEntity<SmsAuthSendResponseDto> smsAuth(@RequestBody @Valid SmsAuthRequestDto smsAuthRequestDto) {
         var response = smsAuthService.smsAuthSend(smsAuthRequestDto);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/sms/verify")
     @ResponseBody
-    public ResponseEntity<AuthVerifyResultDto> smsAuthVerify(@RequestBody SmsAuthVerifyRequestDto smsAuthVerifyRequestDto) {
+    public ResponseEntity<AuthVerifyResultDto> smsAuthVerify(@RequestBody @Valid SmsAuthVerifyRequestDto smsAuthVerifyRequestDto) {
         var response = smsAuthService.smsAuthVerify(smsAuthVerifyRequestDto);
         return ResponseEntity.ok(response);
     }
