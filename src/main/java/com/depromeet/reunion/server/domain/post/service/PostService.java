@@ -25,12 +25,12 @@ public interface PostService {
     /**
      * 게시글 수정
      */
-    void updatePost(Long id, PostRequestDto postSaveDto);
+    void updatePost(Long postId, Long memberId, PostRequestDto postSaveDto);
 
     /**
      * 게시글 삭제
      */
-    void deletePost(Long id);
+    void deletePost(Long postId, Long memberId);
 
     /**
      * 게시글 좋아요

@@ -60,19 +60,22 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public void updatePost(Long postId, PostRequestDto postRequestDto) {
+    public void updatePost(Long postId, Long memberId, PostRequestDto postRequestDto) {
         Post post = validatePost(postId);
-
-        // TODO: 이미지 파일 처리
-        post.updatePost(postRequestDto);
-        postRepository.save(post);
+        if(post.getMember().getId().equals(memberId)) {
+            // TODO: 이미지 파일 처리
+            post.updatePost(postRequestDto);
+            postRepository.save(post);
+        }
     }
 
     @Override
-    public void deletePost(Long id) {
-        validatePost(id);
-        // soft delete
-        postRepository.deleteById(id);
+    public void deletePost(Long postId, Long memberId) {
+        Post post = validatePost(postId);
+        if(post.getMember().getId().equals(memberId)) {
+            // soft delete
+            postRepository.deleteById(postId);
+        }
     }
 
     @Override
@@ -99,6 +102,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<PostListResponseDto> getMyPosts(Long memberId) {
+        validateMember(memberId)
         List<Post> posts = postRepository.findByMemberId(memberId);
         return posts.stream().map(PostListResponseDto::fromEntity).toList();
     }
