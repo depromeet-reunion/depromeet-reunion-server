@@ -41,7 +41,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().cors()
                 .and().csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/v1/auth", "/v1/auth/sms/send", "/v1/auth/sms/verify", "/v1/sign-up", "/health", "/h2-console",
+                .requestMatchers( "/auth/sms/send", "/auth/sms/verify", "/sign-up", "/health",
                         "/v1/slack/group/reject/*", "/v1/slack/group/approve/*").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin().disable()
