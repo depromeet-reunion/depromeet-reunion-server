@@ -1,6 +1,6 @@
 package com.depromeet.reunion.server.domain.member.repository;
 
-import com.depromeet.reunion.server.domain.member.model.entity.Member;
+import com.depromeet.reunion.server.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
