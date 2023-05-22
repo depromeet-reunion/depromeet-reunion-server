@@ -38,11 +38,10 @@ public class MemberService {
                 () -> new BusinessException(ErrorCode.UNAUTHORIZED_PHONE_NUMBER)
         );
 
-        memberRepository.findByPhoneNumber(signupRequestDto.getPhoneNumber()).ifPresent(
-                member -> {
+        memberRepository.findByPhoneNumber(signupRequestDto.getPhoneNumber())
+                .ifPresent(member -> {
                     throw new BusinessException(ErrorCode.ALREADY_EXIST_USER);
-                }
-        );
+                });
 
         MemberAuth memberAuth = MemberAuth.builder()
                 .phoneNumber(signupRequestDto.getPhoneNumber())
@@ -51,9 +50,9 @@ public class MemberService {
 
         memberAuthRepository.save(memberAuth);
 
-        MemberGroup memberGroup = memberGroupRepository.findMemberGroupByPartAndUnit(signupRequestDto.getPart(), signupRequestDto.getUnit()).orElseThrow(
-                () -> new BusinessException(ErrorCode.NOT_EXIST_PART_OR_UNIT)
-        );
+        MemberGroup memberGroup = memberGroupRepository
+                .findMemberGroupByPartAndUnit(signupRequestDto.getPart(), signupRequestDto.getUnit())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXIST_PART_OR_UNIT));
 
         memberGroupRepository.save(memberGroup);
 
