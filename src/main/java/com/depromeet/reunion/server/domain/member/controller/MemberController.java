@@ -1,6 +1,7 @@
 package com.depromeet.reunion.server.domain.member.controller;
 
-import com.depromeet.reunion.server.domain.post.dto.PostListResponseDto;
+
+import com.depromeet.reunion.server.domain.post.dto.response.PostListResponseDto;
 import com.depromeet.reunion.server.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final PostService postService;
+
     @GetMapping("/posts/me/{memberId}")
     public ResponseEntity<List<PostListResponseDto>> getMyPosts(@PathVariable("memberId") Long memberId) {
         return ResponseEntity.ok(postService.getMyPosts(memberId));

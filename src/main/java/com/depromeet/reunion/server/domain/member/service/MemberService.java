@@ -1,9 +1,7 @@
 package com.depromeet.reunion.server.domain.member.service;
 
 import com.depromeet.reunion.server.auth.model.dto.resonse.JwtTokenResponseDto;
-import com.depromeet.reunion.server.auth.repository.AuthResultRepository;
 import com.depromeet.reunion.server.domain.member.event.UserJoinEvent;
-import com.depromeet.reunion.server.domain.member.model.MemberStatus;
 import com.depromeet.reunion.server.domain.member.model.dto.request.SignupRequestDto;
 import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.member.model.entity.MemberAuth;
@@ -27,21 +25,18 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberAuthRepository memberAuthRepository;
     private final MemberGroupRepository memberGroupRepository;
-    private final AuthResultRepository authResultRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public JwtTokenResponseDto signUp(SignupRequestDto signupRequestDto) {
-        authResultRepository.findById(signupRequestDto.getPhoneNumber()).orElseThrow(
-                () -> new BusinessException(ErrorCode.UNAUTHORIZED_PHONE_NUMBER)
-        );
-
         memberRepository.findByPhoneNumber(signupRequestDto.getPhoneNumber())
-                .ifPresent(member -> {
-                    throw new BusinessException(ErrorCode.ALREADY_EXIST_USER);
-                });
+                .ifPresent(
+                        member -> {
+                            throw new BusinessException(ErrorCode.ALREADY_EXIST_USER);
+                        }
+                );
 
         MemberAuth memberAuth = MemberAuth.builder()
                 .phoneNumber(signupRequestDto.getPhoneNumber())
@@ -52,7 +47,9 @@ public class MemberService {
 
         MemberGroup memberGroup = memberGroupRepository
                 .findMemberGroupByPartAndUnit(signupRequestDto.getPart(), signupRequestDto.getUnit())
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXIST_PART_OR_UNIT));
+                .orElseThrow(
+                        () -> new BusinessException(ErrorCode.NOT_EXIST_PART_OR_UNIT)
+                );
 
         memberGroupRepository.save(memberGroup);
 
@@ -60,9 +57,7 @@ public class MemberService {
                 .name(signupRequestDto.getName())
                 .memberAuth(memberAuth)
                 .memberGroup(memberGroup)
-                .status(MemberStatus.WAITING)
                 .build();
-
 
         memberRepository.save(member);
 

@@ -1,7 +1,8 @@
 package com.depromeet.reunion.server.domain.member.dto;
 
-import com.depromeet.reunion.server.domain.member.entity.Member;
+
 import com.depromeet.reunion.server.domain.member.entity.PartType;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import lombok.*;
 
 @Getter
@@ -17,8 +18,8 @@ public class MemberResponseDto {
         return MemberResponseDto.builder()
                 .id(member.getId())
                 .name(member.getName())
-                .part(member.getPart())
-                .unit(member.getUnit())
+                .part(PartType.valueOf(member.getMemberGroup().getPart()))
+                .unit(String.valueOf(member.getMemberGroup().getUnit()))
                 .build();
     }
 }

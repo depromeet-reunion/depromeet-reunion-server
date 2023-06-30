@@ -5,7 +5,10 @@ import com.depromeet.reunion.server.domain.member.model.dto.request.SignupReques
 import com.depromeet.reunion.server.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/sign-up")
@@ -15,9 +18,7 @@ public class SignUpController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<JwtTokenResponseDto> signUp(
-            @RequestBody SignupRequestDto signupRequestDto
-    ) {
+    public ResponseEntity<JwtTokenResponseDto> signUp(@RequestBody SignupRequestDto signupRequestDto) {
         var response = memberService.signUp(signupRequestDto);
         return ResponseEntity.ok(response);
     }

@@ -1,6 +1,6 @@
 package com.depromeet.reunion.server.global.security.filter;
 
-import com.depromeet.reunion.server.domain.member.model.MemberStatus;
+
 import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.member.repository.MemberRepository;
 import com.depromeet.reunion.server.global.exception.BusinessException;
@@ -44,12 +44,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             var id = jwtTokenUtil.getId(token);
 
-            Member member = memberRepository.findById(Long.valueOf(id)).orElseThrow(() -> new BusinessException(ErrorCode.NOT_VALID_MEMBER));
-            if (member.getStatus() == MemberStatus.WAITING) {
-                throw new BusinessException(ErrorCode.WAITING_MEMBER_ERROR);
-            } else if (member.getStatus() == MemberStatus.REJECTED) {
-                throw new BusinessException(ErrorCode.REJECTED_MEMBER_ERROR);
-            }
+            Member member = memberRepository.findById(Long.valueOf(id))
+                    .orElseThrow(() ->
+                            new BusinessException(ErrorCode.NOT_VALID_MEMBER)
+                    );
             var userDetails = new SecurityUserDetails(member);
             var auth = new UsernamePasswordAuthenticationToken(userDetails, null, null);
             SecurityContextHolder.getContext().setAuthentication(auth);
