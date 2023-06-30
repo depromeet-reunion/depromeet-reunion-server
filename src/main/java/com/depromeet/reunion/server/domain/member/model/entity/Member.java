@@ -1,6 +1,5 @@
 package com.depromeet.reunion.server.domain.member.model.entity;
 
-import com.depromeet.reunion.server.domain.member.model.MemberStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,10 +27,5 @@ public class Member {
     @OneToOne(fetch = LAZY)
     @JoinColumn(nullable = false)
     private MemberGroup memberGroup;
-
-    @Setter
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private MemberStatus status;
 
 }

@@ -44,25 +44,7 @@ public class UserJoinEventHandler {
         textObjectList.add(markdownText("*유저 파트:* " + event.getMember().getMemberGroup().getPart()));
         textObjectList.add(markdownText("*유저 기수:* " + event.getMember().getMemberGroup().getUnit()));
 
-
-        String approveUrl = serverUrl + "/v1/slack/group/approve/" + event.getMember().getId();
-        String rejectUrl = serverUrl + "/v1/slack/group/reject/" + event.getMember().getId();
-
-        ButtonElement agreeButton = ButtonElement.builder()
-                .text(plainText("승인"))
-                .url(approveUrl)
-                .value("승인")
-                .build();
-
-        ButtonElement disagreeButton = ButtonElement.builder()
-                .text(plainText("거절"))
-                .url(rejectUrl)
-                .value("거절")
-                .build();
-
         List<BlockElement> blockElementList = new ArrayList<>();
-        blockElementList.add(agreeButton);
-        blockElementList.add(disagreeButton);
 
         List<LayoutBlock> blocks = asBlocks(
                 header(h -> h.text(plainText(title))),

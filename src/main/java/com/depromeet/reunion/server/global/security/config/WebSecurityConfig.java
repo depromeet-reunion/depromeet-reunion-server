@@ -41,8 +41,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().cors()
                 .and().csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/v1/auth", "/v1/auth/sms/send", "/v1/auth/sms/verify", "/v1/sign-up", "/health", "/h2-console",
-                        "/v1/slack/group/reject/*", "/v1/slack/group/approve/*").permitAll()
+                .requestMatchers("/", "/health", "/sign-up", "/swagger-ui/*", "/v3/api-docs/*").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin().disable()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/")
@@ -63,10 +62,8 @@ public class WebSecurityConfig {
         @Override
         public void configure(HttpSecurity http) {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-
             http.addFilterAfter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager, objectMapper, successHandler, failureHandler), UsernamePasswordAuthenticationFilter.class);
             http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenUtil, memberRepository), BasicAuthenticationFilter.class);
-
         }
     }
 

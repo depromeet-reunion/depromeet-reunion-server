@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HealthController {
-    @RequestMapping(value = {"/", "/health"}, method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = {"/", "/health"}, method = {RequestMethod.GET})
     @ResponseBody
     public String health() {
         return "Health Good";
