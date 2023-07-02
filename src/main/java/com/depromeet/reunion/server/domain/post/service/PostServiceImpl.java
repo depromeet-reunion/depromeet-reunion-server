@@ -1,6 +1,6 @@
 package com.depromeet.reunion.server.domain.post.service;
 
-import com.depromeet.reunion.server.domain.member.entity.Member;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.member.repository.MemberRepository;
 import com.depromeet.reunion.server.domain.post.dto.response.PostListResponseDto;
 import com.depromeet.reunion.server.domain.post.dto.request.PostRequestDto;
@@ -102,7 +102,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<PostListResponseDto> getMyPosts(Long memberId) {
-        validateMember(memberId)
+        validateMember(memberId);
         List<Post> posts = postRepository.findByMemberId(memberId);
         return posts.stream().map(PostListResponseDto::fromEntity).toList();
     }

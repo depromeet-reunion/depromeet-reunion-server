@@ -1,7 +1,7 @@
 package com.depromeet.reunion.server.domain.post.controller;
 
 import com.depromeet.reunion.server.domain.common.ResponseDto;
-import com.depromeet.reunion.server.domain.member.entity.Member;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.post.dto.request.PostRequestDto;
 import com.depromeet.reunion.server.domain.post.dto.response.BoardResponseDto;
 import com.depromeet.reunion.server.domain.post.dto.response.PostListResponseDto;

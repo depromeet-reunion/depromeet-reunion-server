@@ -1,8 +1,8 @@
 package com.depromeet.reunion.server.domain.post.entity;
 
 import com.depromeet.reunion.server.domain.common.BaseTimeEntity;
-import com.depromeet.reunion.server.domain.member.entity.Member;
 import com.depromeet.reunion.server.domain.comment.entity.Comment;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.post.dto.request.PostRequestDto;
 import jakarta.persistence.*;
 import lombok.*;

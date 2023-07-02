@@ -1,10 +1,9 @@
 package com.depromeet.reunion.server.domain.comment.dto.request;
 
 import com.depromeet.reunion.server.domain.comment.entity.Comment;
-import com.depromeet.reunion.server.domain.member.entity.Member;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.post.entity.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter

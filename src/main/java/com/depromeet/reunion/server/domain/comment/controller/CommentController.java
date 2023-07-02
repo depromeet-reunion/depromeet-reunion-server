@@ -4,7 +4,7 @@ import com.depromeet.reunion.server.domain.comment.dto.request.CommentRequestDto
 import com.depromeet.reunion.server.domain.comment.dto.response.CommentResponseDto;
 import com.depromeet.reunion.server.domain.comment.service.CommentService;
 import com.depromeet.reunion.server.domain.common.ResponseDto;
-import com.depromeet.reunion.server.domain.member.entity.Member;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.global.annotation.ReqMember;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
