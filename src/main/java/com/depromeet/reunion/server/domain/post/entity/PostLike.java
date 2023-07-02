@@ -1,6 +1,7 @@
 package com.depromeet.reunion.server.domain.post.entity;
 
-import com.depromeet.reunion.server.domain.member.entity.Member;
+
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
