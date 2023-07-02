@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ApiResponse<T> {
+public class ResponseDto<T> {
     private T data;
 
     public static <T> ResponseEntity<T> ok(T data) {

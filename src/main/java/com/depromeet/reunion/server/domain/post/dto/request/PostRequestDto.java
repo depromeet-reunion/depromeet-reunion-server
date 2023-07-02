@@ -1,9 +1,10 @@
 package com.depromeet.reunion.server.domain.post.dto.request;
 
-import com.depromeet.reunion.server.domain.member.model.entity.Member;
+import com.depromeet.reunion.server.domain.member.entity.Member;
 import com.depromeet.reunion.server.domain.post.entity.Board;
 import com.depromeet.reunion.server.domain.post.entity.Post;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
