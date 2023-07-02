@@ -27,7 +27,7 @@ public class PostResponseDto {
     @Schema(description = "작성자")
     private MemberResponseDto member;
     @Schema(description = "첨부 이미지 파일 리스트, 이미지 없으면 빈 배열 반환")
-    private List<ImageResponseDto> imageFiles;
+    private String imgUrl;
     @Schema(description = "좋아요 수")
     private int likeCnt;
     @Schema(description = "댓글 수")
@@ -37,17 +37,11 @@ public class PostResponseDto {
 
     public static PostResponseDto fromEntity(Post post) {
 
-        List<ImageResponseDto> imageFiles = Optional.ofNullable(post.getImageFiles())
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(ImageResponseDto::fromEntity)
-                .toList();
-
         return PostResponseDto.builder()
                 .id(String.valueOf(post.getId()))
                 .title(post.getTitle())
                 .content(post.getContent())
-                .imageFiles(imageFiles)
+                .imgUrl(post.getImageFile().getImgUrl())
                 .createdAt(post.getCreatedAt())
                 .member(MemberResponseDto.fromEntity(post.getMember()))
                 .likeCnt(post.getLikeCount())
