@@ -67,7 +67,7 @@ public class BoardController {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(schema = @Schema(implementation = PostResponseDto.class))),
     })
-    @PostMapping("/{boardId}/posts/{memberId}")
+    @PostMapping("/{boardId}/posts")
     public ResponseEntity<PostResponseDto> createPost(@PathVariable("boardId") Long boardId,
                                                       @ReqMember Member member,
                                                       @RequestPart(value = "postRequest") PostRequestDto postRequestDto,
