@@ -17,7 +17,6 @@ public class ImageResponseDto {
     public static ImageResponseDto fromEntity(ImageFile imageFile) {
         return ImageResponseDto.builder()
                 .imgUrl(imageFile.getImgUrl())
-                .isMain(imageFile.isMain())
                 .build();
     }
 }

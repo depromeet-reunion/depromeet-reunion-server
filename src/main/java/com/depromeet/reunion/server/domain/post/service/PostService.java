@@ -5,6 +5,7 @@ import com.depromeet.reunion.server.domain.post.dto.request.PostRequestDto;
 import com.depromeet.reunion.server.domain.post.dto.response.PostResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 public interface PostService {
     /**
@@ -20,12 +21,12 @@ public interface PostService {
     /**
      * 게시글 등록
      */
-    PostResponseDto createPost(Long boardId, Long memberId, PostRequestDto postRequestDto, List<MultipartFile> imagefiles);
+    PostResponseDto createPost(Long boardId, Long memberId, PostRequestDto postRequestDto, MultipartFile imagefile) throws IOException;
 
     /**
      * 게시글 수정
      */
-    void updatePost(Long postId, Long memberId, PostRequestDto postSaveDto);
+    void updatePost(Long postId, Long memberId, PostRequestDto postSaveDto, MultipartFile multipartFile);
 
     /**
      * 게시글 삭제

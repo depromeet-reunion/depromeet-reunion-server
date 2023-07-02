@@ -1,33 +1,41 @@
 package com.depromeet.reunion.server.domain.post.service;
 
+import com.depromeet.reunion.server.domain.common.AmazonS3Uploader;
 import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.member.repository.MemberRepository;
 import com.depromeet.reunion.server.domain.post.dto.response.PostListResponseDto;
 import com.depromeet.reunion.server.domain.post.dto.request.PostRequestDto;
 import com.depromeet.reunion.server.domain.post.dto.response.PostResponseDto;
 import com.depromeet.reunion.server.domain.post.entity.Board;
+import com.depromeet.reunion.server.domain.post.entity.ImageFile;
 import com.depromeet.reunion.server.domain.post.entity.Post;
 import com.depromeet.reunion.server.domain.post.entity.PostLike;
 import com.depromeet.reunion.server.domain.post.repository.BoardRepository;
+import com.depromeet.reunion.server.domain.post.repository.ImageFileRepository;
 import com.depromeet.reunion.server.domain.post.repository.PostLikeRepository;
 import com.depromeet.reunion.server.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PostServiceImpl implements PostService{
+@Slf4j
+public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final PostLikeRepository postLikeRepository;
+    private final ImageFileRepository imageFileRepository;
+    private final AmazonS3Uploader amazonS3Uploader;
 
 
     @Override
@@ -48,22 +56,58 @@ public class PostServiceImpl implements PostService{
 
 
     @Override
-    public PostResponseDto createPost(Long boardId, Long memberId, PostRequestDto postRequestDto, List<MultipartFile> imagefiles) {
+    public PostResponseDto createPost(Long boardId, Long memberId, PostRequestDto postRequestDto, MultipartFile imagefile) {
         Board board = validateBoard(boardId);
         Member member = validateMember(memberId);
 
-        // TODO: 이미지 파일 처리
+        Post post = postRepository.save(postRequestDto.toEntity(member, board));
 
-        // post 객체 만들어서 save
-        Post post = postRepository.save(postRequestDto.toEntity(member, board, imagefiles));
+        // 이미지 s3 업로드
+        if (imagefile != null && !imagefile.isEmpty()) {
+            try {
+                String path = amazonS3Uploader.upload(imagefile, "images");
+                ImageFile imageFile = imageFileRepository.save(ImageFile.builder().imgUrl(path).post(post).build());
+                post.setImageFile(imageFile);
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+        }
         return PostResponseDto.fromEntity(post);
     }
 
     @Override
-    public void updatePost(Long postId, Long memberId, PostRequestDto postRequestDto) {
+    public void updatePost(Long postId, Long memberId, PostRequestDto postRequestDto, MultipartFile newImageFile) {
         Post post = validatePost(postId);
-        if(post.getMember().getId().equals(memberId)) {
-            // TODO: 이미지 파일 처리
+        if (post.getMember().getId().equals(memberId)) {
+            ImageFile existingImage = post.getImageFile();
+            // 이미지 변경 or 없었는데 추가
+            if (newImageFile != null) {
+                if (existingImage != null) {
+                    // 기존 이미지 삭제
+                    amazonS3Uploader.deleteS3(existingImage.getImgUrl());
+                    imageFileRepository.deleteById(existingImage.getId());
+                }
+
+                try {
+                    // 새 이미지 업로드
+                    String newPath = amazonS3Uploader.upload(newImageFile, "images");
+                    // 이미지 경로 업데이트
+                    existingImage.setImgUrl(newPath);
+                    existingImage = imageFileRepository.save(existingImage);
+                    post.setImageFile(existingImage);
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                }
+            } else {
+                if (existingImage != null) {
+                    // 기존 이미지 삭제
+                    amazonS3Uploader.deleteS3(existingImage.getImgUrl());
+                    imageFileRepository.deleteById(existingImage.getId());
+                    post.setImageFile(null);
+                }
+            }
+
+            // 내용 업데이트
             post.updatePost(postRequestDto);
             postRepository.save(post);
         }
@@ -72,7 +116,7 @@ public class PostServiceImpl implements PostService{
     @Override
     public void deletePost(Long postId, Long memberId) {
         Post post = validatePost(postId);
-        if(post.getMember().getId().equals(memberId)) {
+        if (post.getMember().getId().equals(memberId)) {
             // soft delete
             postRepository.deleteById(postId);
         }
@@ -106,6 +150,7 @@ public class PostServiceImpl implements PostService{
         List<Post> posts = postRepository.findByMemberId(memberId);
         return posts.stream().map(PostListResponseDto::fromEntity).toList();
     }
+
 
     private Board validateBoard(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(

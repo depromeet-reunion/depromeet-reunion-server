@@ -28,7 +28,7 @@ public class PostListResponseDto {
     private MemberResponseDto member;
     @Schema(description = "대표이미지 (썸네일), 없으면 null")
     @Nullable
-    private Optional<String> mainImgUrl;
+    private String imgUrl;
     @Schema(description = "좋아요 수")
     private int likeCnt;
     @Schema(description = "댓글 수")
@@ -37,19 +37,12 @@ public class PostListResponseDto {
     private LocalDateTime createdAt;
 
     public static PostListResponseDto fromEntity(Post post) {
-        // 메인이미지가 지정되어 있으면 이미지경로 반환
-        // 아니면 null 반환
-        Optional<String> mainImgUrl = post.getImageFiles()
-                .stream()
-                .filter(imageFile -> imageFile.isMain())
-                .findFirst()
-                .map(imageFile -> imageFile.getImgUrl());
 
         return PostListResponseDto.builder()
                 .id(String.valueOf(post.getId()))
                 .title(post.getTitle())
                 .content(post.getContent())
-                .mainImgUrl(mainImgUrl)
+                .imgUrl(post.getImageFile().getImgUrl())
                 .createdAt(post.getCreatedAt())
                 .member(MemberResponseDto.fromEntity(post.getMember()))
                 .likeCnt(post.getLikeCount())

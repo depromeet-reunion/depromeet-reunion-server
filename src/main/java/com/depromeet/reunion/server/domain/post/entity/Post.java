@@ -49,8 +49,8 @@ public class Post extends BaseTimeEntity {
     private Board board;
 
     // == 게시글 삭제하면 달려있는 이미지 모두 삭제 == //
-    @OneToMany(mappedBy = "post")
-    private List<ImageFile> imageFiles = new ArrayList<>();
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ImageFile imageFile;
 
     // == 게시글 삭제하면 달려있는 댓글 모두 삭제 == //
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -58,16 +58,28 @@ public class Post extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Post (String title, String content, List<ImageFile> imageFiles, Member member, Board board) {
+    public Post(String title, String content, Member member, Board board) {
         this.title = title;
         this.content = content;
-        this.imageFiles = imageFiles;
         this.member = member;
         this.board = board;
     }
+
     public void updatePost(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
+    }
+
+    // 이미지 파일과의 연결 설정 (양방향 연관관계)
+    public void setImageFile(ImageFile imageFile) {
+        if (imageFile == null) {
+            if (this.imageFile != null) {
+                this.imageFile.setPost(null);
+            }
+        } else {
+            imageFile.setPost(this);
+        }
+        this.imageFile = imageFile;
     }
 
     public void likePost() {

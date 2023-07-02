@@ -21,7 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+
 @Tag(name = "Board Controller", description = "게시판 API")
 @RestController
 @RequestMapping("/api/v1/boards")
@@ -34,7 +36,7 @@ public class BoardController {
     /**
      * 게시판 목록 조회
      */
-    @Operation( summary = "게시판 목록 조회", description = "앱에 존재하는 게시판 목록을 조회합니다")
+    @Operation(summary = "게시판 목록 조회", description = "앱에 존재하는 게시판 목록을 조회합니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardResponseDto.class)))),
@@ -66,9 +68,10 @@ public class BoardController {
                     content = @Content(schema = @Schema(implementation = PostResponseDto.class))),
     })
     @PostMapping("/{boardId}/posts/{memberId}")
-    public ResponseEntity<PostResponseDto> createPost(@ReqMember Member member, @PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId,
+    public ResponseEntity<PostResponseDto> createPost(@PathVariable("boardId") Long boardId,
+                                                      @ReqMember Member member,
                                                       @RequestPart(value = "postRequest") PostRequestDto postRequestDto,
-                                                      @RequestPart(value = "imageFiles",required = false) List<MultipartFile> multipartFiles) {
-        return ResponseDto.created(postService.createPost(boardId, member.getId(), postRequestDto, multipartFiles));
+                                                      @RequestPart(value = "imageFile", required = false) MultipartFile multipartFile) throws IOException {
+        return ResponseDto.created(postService.createPost(boardId, member.getId(), postRequestDto, multipartFile));
     }
 }

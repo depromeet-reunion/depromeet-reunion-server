@@ -45,8 +45,8 @@ public class PostController {
     @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updatePost(@ReqMember Member member, @PathVariable("postId") Long postId,
                                            @RequestPart(value = "postRequest")  PostRequestDto postRequestDto,
-                                           @RequestPart(value = "imageFiles", required = false) List<MultipartFile> multipartFiles) {
-        postService.updatePost(postId, member.getId(), postRequestDto);
+                                           @RequestPart(value = "imageFile", required = false) MultipartFile multipartFile) {
+        postService.updatePost(postId, member.getId(), postRequestDto, multipartFile);
         return ResponseDto.noContent();
     }
 
