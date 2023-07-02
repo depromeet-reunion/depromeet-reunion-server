@@ -1,11 +1,14 @@
 package com.depromeet.reunion.server.domain.post.entity;
 
-import com.depromeet.reunion.server.domain.common.BaseTimeEntity;
-import com.depromeet.reunion.server.domain.member.entity.Member;
 import com.depromeet.reunion.server.domain.comment.entity.Comment;
+import com.depromeet.reunion.server.domain.common.BaseTimeEntity;
 import com.depromeet.reunion.server.domain.post.dto.request.PostRequestDto;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 
@@ -58,13 +61,14 @@ public class Post extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Post (String title, String content, List<ImageFile> imageFiles, Member member, Board board) {
+    public Post(String title, String content, List<ImageFile> imageFiles, Member member, Board board) {
         this.title = title;
         this.content = content;
         this.imageFiles = imageFiles;
         this.member = member;
         this.board = board;
     }
+
     public void updatePost(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();

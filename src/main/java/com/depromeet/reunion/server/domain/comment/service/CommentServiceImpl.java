@@ -4,7 +4,8 @@ import com.depromeet.reunion.server.domain.comment.dto.request.CommentRequestDto
 import com.depromeet.reunion.server.domain.comment.dto.response.CommentResponseDto;
 import com.depromeet.reunion.server.domain.comment.entity.Comment;
 import com.depromeet.reunion.server.domain.comment.repository.CommentRepository;
-import com.depromeet.reunion.server.domain.member.entity.Member;
+
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.member.repository.MemberRepository;
 import com.depromeet.reunion.server.domain.post.entity.Post;
 import com.depromeet.reunion.server.domain.post.repository.PostRepository;
