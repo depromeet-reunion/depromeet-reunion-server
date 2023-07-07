@@ -91,10 +91,10 @@ public class PostServiceImpl implements PostService {
                 try {
                     // 새 이미지 업로드
                     String newPath = amazonS3Uploader.upload(newImageFile, "images");
-                    // 이미지 경로 업데이트
-                    existingImage.setImgUrl(newPath);
-                    existingImage = imageFileRepository.save(existingImage);
-                    post.setImageFile(existingImage);
+                    // 이미지 생성 및 경로 업데이트
+                    ImageFile newImage = ImageFile.builder().imgUrl(newPath).build();
+                    newImage = imageFileRepository.save(newImage);
+                    post.setImageFile(newImage);
                 } catch (IOException e) {
                     log.error(e.getMessage());
                 }

@@ -43,7 +43,9 @@ public class PostController {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updatePost(@ReqMember Member member, @PathVariable("postId") Long postId,
+    public ResponseEntity<Void> updatePost(@PathVariable("postId") Long postId,
+                                           @ReqMember Member member,
+//                                           @PathVariable("memberId") Long memberId,
                                            @RequestPart(value = "postRequest")  PostRequestDto postRequestDto,
                                            @RequestPart(value = "imageFile", required = false) MultipartFile multipartFile) {
         postService.updatePost(postId, member.getId(), postRequestDto, multipartFile);
@@ -55,7 +57,9 @@ public class PostController {
             @ApiResponse(responseCode = "204", description = "Success")
     })
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> updatePost(@ReqMember Member member, @PathVariable("postId") Long postId){
+    public ResponseEntity<Void> deletePost(@PathVariable("postId") Long postId,
+                                           @ReqMember Member member
+                                           ){
         postService.deletePost(postId, member.getId());
         return ResponseDto.noContent();
     }
@@ -66,7 +70,10 @@ public class PostController {
             @ApiResponse(responseCode = "204", description = "Success")
     })
     @PostMapping("/{postId}/like")
-    public ResponseEntity<Void> likePost(@ReqMember Member member, @PathVariable("postId") Long postId) {
+    public ResponseEntity<Void> likePost(@PathVariable("postId") Long postId,
+                                         @ReqMember Member member
+//                                         @PathVariable("memberId") Long memberId
+                                         ) {
         postService.likePost(postId, member.getId());
         return ResponseDto.noContent();
     }
@@ -77,7 +84,10 @@ public class PostController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = PostListResponseDto.class)))),
     })
     @GetMapping("/me")
-    public ResponseEntity<List<PostListResponseDto>> getMyPosts(@ReqMember Member member) {
+    public ResponseEntity<List<PostListResponseDto>> getMyPosts(
+            @ReqMember Member member
+//            @PathVariable("memberId") Long memberId
+            ) {
         return ResponseDto.ok(postService.getMyPosts(member.getId()));
     }
 }

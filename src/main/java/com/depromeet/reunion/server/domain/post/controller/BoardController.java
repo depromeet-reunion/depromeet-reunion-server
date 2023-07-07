@@ -74,4 +74,5 @@ public class BoardController {
                                                       @RequestPart(value = "imageFile", required = false) MultipartFile multipartFile) throws IOException {
         return ResponseDto.created(postService.createPost(boardId, member.getId(), postRequestDto, multipartFile));
     }
+
 }

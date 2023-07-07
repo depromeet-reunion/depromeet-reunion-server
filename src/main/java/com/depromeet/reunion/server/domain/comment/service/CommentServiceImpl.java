@@ -37,6 +37,7 @@ public class CommentServiceImpl implements CommentService{
         Post post = findPost(postId);
         Member member = findMember(memberId);
         Comment comment = commentRepository.save(commentRequestDto.toEntity(post, member));
+        post.addComment();
         return CommentResponseDto.fromEntity(comment);
     }
 

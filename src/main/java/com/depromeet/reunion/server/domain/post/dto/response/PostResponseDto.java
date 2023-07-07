@@ -36,17 +36,22 @@ public class PostResponseDto {
     private List<CommentResponseDto> comments;
 
     public static PostResponseDto fromEntity(Post post) {
-
-        return PostResponseDto.builder()
+        PostResponseDto.PostResponseDtoBuilder builder = PostResponseDto.builder()
                 .id(String.valueOf(post.getId()))
                 .title(post.getTitle())
                 .content(post.getContent())
-                .imgUrl(post.getImageFile().getImgUrl())
                 .createdAt(post.getCreatedAt())
                 .member(MemberResponseDto.fromEntity(post.getMember()))
                 .likeCnt(post.getLikeCount())
                 .commentCnt(post.getCommentCount())
-                .comments(post.getComments().stream().map(CommentResponseDto::fromEntity).toList())
-                .build();
+                .comments(post.getComments().stream().map(CommentResponseDto::fromEntity).toList());
+
+        if (post.getImageFile() != null) {
+            builder.imgUrl(post.getImageFile().getImgUrl());
+        } else {
+            builder.imgUrl("");
+        }
+
+        return builder.build();
     }
 }

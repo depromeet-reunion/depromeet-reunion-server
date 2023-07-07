@@ -38,15 +38,21 @@ public class PostListResponseDto {
 
     public static PostListResponseDto fromEntity(Post post) {
 
-        return PostListResponseDto.builder()
+        PostListResponseDto.PostListResponseDtoBuilder builder = PostListResponseDto.builder()
                 .id(String.valueOf(post.getId()))
                 .title(post.getTitle())
                 .content(post.getContent())
-                .imgUrl(post.getImageFile().getImgUrl())
                 .createdAt(post.getCreatedAt())
                 .member(MemberResponseDto.fromEntity(post.getMember()))
                 .likeCnt(post.getLikeCount())
-                .commentCnt(post.getCommentCount())
-                .build();
+                .commentCnt(post.getCommentCount());
+
+        if (post.getImageFile() != null) {
+            builder.imgUrl(post.getImageFile().getImgUrl());
+        } else {
+            builder.imgUrl("");
+        }
+
+        return builder.build();
     }
 }

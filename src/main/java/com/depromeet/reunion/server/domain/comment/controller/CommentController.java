@@ -41,7 +41,10 @@ public class CommentController {
             @ApiResponse(responseCode = "201", description = "Success"),
     })
     @PostMapping()
-    public ResponseEntity<CommentResponseDto> createComment(@ReqMember Member member, @PathVariable("postId") Long postId, @RequestBody CommentRequestDto commentRequestDto) {
+    public ResponseEntity<CommentResponseDto> createComment(@PathVariable("postId") Long postId,
+                                                            @ReqMember Member member,
+//                                                            @PathVariable("memberId") Long memberId,
+                                                            @RequestBody CommentRequestDto commentRequestDto) {
         return ResponseDto.created(commentService.createComment(postId, member.getId(), commentRequestDto));
     }
 }

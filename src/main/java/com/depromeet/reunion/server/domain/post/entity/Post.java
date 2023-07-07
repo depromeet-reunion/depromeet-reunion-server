@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "post")
-@SQLDelete(sql = "UPDATE post SET deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE post SET deleted = true WHERE post_id = ?")
+@Where(clause = "deleted = false")
 public class Post extends BaseTimeEntity {
 
     @Id
@@ -88,5 +90,13 @@ public class Post extends BaseTimeEntity {
 
     public void unlikePost() {
         this.likeCount -= 1;
+    }
+
+    public void addComment() {
+        this.commentCount += 1;
+    }
+
+    public void deleteComment() {
+        this.commentCount -= 1;
     }
 }
