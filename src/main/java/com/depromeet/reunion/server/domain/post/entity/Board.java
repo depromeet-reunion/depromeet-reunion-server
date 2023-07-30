@@ -1,5 +1,6 @@
 package com.depromeet.reunion.server.domain.post.entity;
 import com.depromeet.reunion.server.domain.common.BaseTimeEntity;
+import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,4 +23,14 @@ public class Board extends BaseTimeEntity {
     @ColumnDefault("false")
     @Column(nullable = false)
     protected boolean deleted;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @Builder
+    public Board (String boardName, Member member) {
+        this.boardName = boardName;
+        this.member = member;
+    }
 }

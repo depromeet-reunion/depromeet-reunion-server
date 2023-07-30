@@ -2,6 +2,7 @@ package com.depromeet.reunion.server.domain.post.controller;
 
 import com.depromeet.reunion.server.domain.common.ResponseDto;
 import com.depromeet.reunion.server.domain.member.model.entity.Member;
+import com.depromeet.reunion.server.domain.post.dto.request.BoardRequestDto;
 import com.depromeet.reunion.server.domain.post.dto.request.PostRequestDto;
 import com.depromeet.reunion.server.domain.post.dto.response.BoardResponseDto;
 import com.depromeet.reunion.server.domain.post.dto.response.PostListResponseDto;
@@ -32,6 +33,20 @@ public class BoardController {
 
     private final BoardService boardService;
     private final PostService postService;
+
+    /**
+     * 게시판 생성
+     */
+    @Operation(summary = "게시판 생성", description = "새로운 게시판을 생성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardResponseDto.class)))),
+    })
+    @PostMapping
+    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto, @ReqMember Member member) {
+        return ResponseDto.ok(boardService.createBoard(boardRequestDto, member.getId()));
+    }
+
 
     /**
      * 게시판 목록 조회

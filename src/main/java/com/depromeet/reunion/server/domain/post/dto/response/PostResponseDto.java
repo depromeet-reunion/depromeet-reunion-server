@@ -32,8 +32,6 @@ public class PostResponseDto {
     private int likeCnt;
     @Schema(description = "댓글 수")
     private int commentCnt;
-    @Schema(description = "댓글 목록 반환")
-    private List<CommentResponseDto> comments;
 
     public static PostResponseDto fromEntity(Post post) {
         PostResponseDto.PostResponseDtoBuilder builder = PostResponseDto.builder()
@@ -43,8 +41,7 @@ public class PostResponseDto {
                 .createdAt(post.getCreatedAt())
                 .member(MemberResponseDto.fromEntity(post.getMember()))
                 .likeCnt(post.getLikeCount())
-                .commentCnt(post.getCommentCount())
-                .comments(post.getComments().stream().map(CommentResponseDto::fromEntity).toList());
+                .commentCnt(post.getCommentCount());
 
         if (post.getImageFile() != null) {
             builder.imgUrl(post.getImageFile().getImgUrl());
