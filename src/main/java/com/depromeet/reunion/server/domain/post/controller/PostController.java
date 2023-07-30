@@ -2,8 +2,8 @@ package com.depromeet.reunion.server.domain.post.controller;
 
 import com.depromeet.reunion.server.domain.common.ResponseDto;
 import com.depromeet.reunion.server.domain.member.model.entity.Member;
-import com.depromeet.reunion.server.domain.post.dto.response.PostListResponseDto;
 import com.depromeet.reunion.server.domain.post.dto.request.PostRequestDto;
+import com.depromeet.reunion.server.domain.post.dto.response.PostListResponseDto;
 import com.depromeet.reunion.server.domain.post.dto.response.PostResponseDto;
 import com.depromeet.reunion.server.domain.post.service.PostService;
 import com.depromeet.reunion.server.global.annotation.ReqMember;
@@ -15,12 +15,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
 @Tag(name = "Post Controller", description = "게시글 API")
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -42,13 +43,11 @@ public class PostController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success")
     })
-    @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{postId}", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updatePost(@PathVariable("postId") Long postId,
                                            @ReqMember Member member,
-//                                           @PathVariable("memberId") Long memberId,
-                                           @RequestPart(value = "postRequest")  PostRequestDto postRequestDto,
-                                           @RequestPart(value = "imageFile", required = false) MultipartFile multipartFile) {
-        postService.updatePost(postId, member.getId(), postRequestDto, multipartFile);
+                                           @RequestPart(value = "postRequest") PostRequestDto postRequestDto) {
+        postService.updatePost(postId, member.getId(), postRequestDto);
         return ResponseDto.noContent();
     }
 
@@ -72,7 +71,6 @@ public class PostController {
     @PostMapping("/{postId}/like")
     public ResponseEntity<Void> likePost(@PathVariable("postId") Long postId,
                                          @ReqMember Member member
-//                                         @PathVariable("memberId") Long memberId
                                          ) {
         postService.likePost(postId, member.getId());
         return ResponseDto.noContent();
@@ -86,7 +84,6 @@ public class PostController {
     @GetMapping("/me")
     public ResponseEntity<List<PostListResponseDto>> getMyPosts(
             @ReqMember Member member
-//            @PathVariable("memberId") Long memberId
             ) {
         return ResponseDto.ok(postService.getMyPosts(member.getId()));
     }

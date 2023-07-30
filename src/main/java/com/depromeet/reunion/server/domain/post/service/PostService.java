@@ -21,12 +21,12 @@ public interface PostService {
     /**
      * 게시글 등록
      */
-    PostResponseDto createPost(Long boardId, Long memberId, PostRequestDto postRequestDto, MultipartFile imagefile) throws IOException;
+    PostResponseDto createPost(Long boardId, Long memberId, PostRequestDto postRequestDto) throws IOException;
 
     /**
      * 게시글 수정
      */
-    void updatePost(Long postId, Long memberId, PostRequestDto postSaveDto, MultipartFile multipartFile);
+    void updatePost(Long postId, Long memberId, PostRequestDto postSaveDto);
 
     /**
      * 게시글 삭제
