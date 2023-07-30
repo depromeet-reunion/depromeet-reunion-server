@@ -34,8 +34,8 @@ public class PostController {
                     content = @Content(schema = @Schema(implementation = PostResponseDto.class))),
     })
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResponseDto> getPostById(@PathVariable("postId") Long postId) {
-        return ResponseDto.ok(postService.getPostById(postId));
+    public ResponseEntity<PostResponseDto> getPostById(@PathVariable("postId") Long postId, @ReqMember Member member) {
+        return ResponseDto.ok(postService.getPostById(postId, member.getId()));
     }
 
     @Operation(summary = "게시글 수정", description = "게시글을 수정하고 수정된 내용을 반환합니다. 인증이 필요한 요청입니다.")

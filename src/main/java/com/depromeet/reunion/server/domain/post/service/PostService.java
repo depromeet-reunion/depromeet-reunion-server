@@ -11,12 +11,12 @@ public interface PostService {
     /**
      * 게시판내에 게시글 모두 조회
      */
-    List<PostListResponseDto> getPostsByBoard(Long boardId);
+    List<PostListResponseDto> getPostsByBoard(Long boardId, Long memberId);
 
     /**
      * 게시글 상세 조회
      */
-    PostResponseDto getPostById(Long postId);
+    PostResponseDto getPostById(Long postId, Long memberId);
 
     /**
      * 게시글 등록

@@ -39,21 +39,21 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public List<PostListResponseDto> getPostsByBoard(Long boardId) {
+    public List<PostListResponseDto> getPostsByBoard(Long boardId, Long memberId) {
         // board id 확인
         validateBoard(boardId);
         // board id로 게시글 리스트 반환
         List<Post> posts = postRepository.findByBoardId(boardId);
-        return posts.stream().map(PostListResponseDto::fromEntity).toList();
+        return posts.stream().map(post -> PostListResponseDto.fromEntity(post, memberId)).toList();
     }
 
     @Override
-    public PostResponseDto getPostById(Long postId) {
+    public PostResponseDto getPostById(Long postId, Long memberId) {
         // postId 확인
         Post post = validatePost(postId);
-        return PostResponseDto.fromEntity(post);
-    }
 
+        return PostResponseDto.fromEntity(post, memberId);
+    }
 
     @Override
     public PostResponseDto createPost(Long boardId, Long memberId, PostRequestDto postRequestDto, MultipartFile imagefile) {
@@ -72,7 +72,7 @@ public class PostServiceImpl implements PostService {
                 log.error(e.getMessage());
             }
         }
-        return PostResponseDto.fromEntity(post);
+        return PostResponseDto.fromEntity(post, member.getId());
     }
 
     @Override
@@ -148,7 +148,7 @@ public class PostServiceImpl implements PostService {
     public List<PostListResponseDto> getMyPosts(Long memberId) {
         validateMember(memberId);
         List<Post> posts = postRepository.findByMemberId(memberId);
-        return posts.stream().map(PostListResponseDto::fromEntity).toList();
+        return posts.stream().map(post -> PostListResponseDto.fromEntity(post, memberId)).toList();
     }
 
 

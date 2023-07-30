@@ -70,8 +70,8 @@ public class BoardController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = PostListResponseDto.class)))),
     })
     @GetMapping("/{boardId}/posts")
-    public ResponseEntity<List<PostListResponseDto>> getPostsByBoard(@PathVariable("boardId") Long boardId) {
-        return ResponseDto.ok(postService.getPostsByBoard(boardId));
+    public ResponseEntity<List<PostListResponseDto>> getPostsByBoard(@PathVariable("boardId") Long boardId, @ReqMember Member member) {
+        return ResponseDto.ok(postService.getPostsByBoard(boardId, member.getId()));
     }
 
     /**
