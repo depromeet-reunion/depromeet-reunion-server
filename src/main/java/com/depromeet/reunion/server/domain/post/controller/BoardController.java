@@ -20,10 +20,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @Tag(name = "Board Controller", description = "게시판 API")
 @RestController
@@ -82,12 +83,11 @@ public class BoardController {
             @ApiResponse(responseCode = "200", description = "Success",
                     content = @Content(schema = @Schema(implementation = PostResponseDto.class))),
     })
-    @PostMapping("/{boardId}/posts")
+    @PostMapping(value = "/{boardId}/posts", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PostResponseDto> createPost(@PathVariable("boardId") Long boardId,
                                                       @ReqMember Member member,
-                                                      @RequestPart(value = "postRequest") PostRequestDto postRequestDto,
-                                                      @RequestPart(value = "imageFile", required = false) MultipartFile multipartFile) throws IOException {
-        return ResponseDto.created(postService.createPost(boardId, member.getId(), postRequestDto, multipartFile));
+                                                      @ModelAttribute PostRequestDto postRequestDto) throws IOException {
+        return ResponseDto.created(postService.createPost(boardId, member.getId(), postRequestDto));
     }
 
 }
