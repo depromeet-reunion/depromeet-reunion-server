@@ -51,8 +51,10 @@ public class PostServiceImpl implements PostService {
     public PostResponseDto getPostById(Long postId, Long memberId) {
         // postId 확인
         Post post = validatePost(postId);
+        Optional<PostLike> byMemberAndPost = postLikeRepository.findByMemberIdAndPostId(memberId, postId);
+        boolean isLiked = byMemberAndPost.isPresent();
 
-        return PostResponseDto.fromEntity(post, memberId);
+        return PostResponseDto.fromEntity(post, memberId, isLiked);
     }
 
     @Override

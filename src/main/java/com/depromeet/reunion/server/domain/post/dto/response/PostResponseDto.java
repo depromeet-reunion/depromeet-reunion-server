@@ -29,6 +29,8 @@ public class PostResponseDto {
     private MemberResponseDto member;
     @Schema(description = "본인이 작성한 글인지 여부")
     private Boolean isMine;
+    @Schema(description = "사용자가 게시글에 좋아요를 눌렀는지 여부, 게시글 작성시에는 나오지않는 필드입니다")
+    private Boolean isLiked;
     @Schema(description = "첨부 이미지 파일 리스트, 이미지 없으면 빈 배열 반환")
     private String imgUrl;
     @Schema(description = "좋아요 수")
@@ -36,7 +38,7 @@ public class PostResponseDto {
     @Schema(description = "댓글 수")
     private int commentCnt;
 
-    public static PostResponseDto fromEntity(Post post, Long memberId) {
+    public static PostResponseDto fromEntity(Post post, Long memberId, Boolean isLiked) {
         // post.getMember().getId()와 memberId가 일치하는지 확인하여 isMine 값을 설정
         boolean isMine = post.getMember().getId().equals(memberId);
         PostResponseDto.PostResponseDtoBuilder builder = PostResponseDto.builder()
@@ -46,6 +48,7 @@ public class PostResponseDto {
                 .createdAt(post.getCreatedAt())
                 .member(MemberResponseDto.fromEntity(post.getMember()))
                 .isMine(isMine)
+                .isLiked(isLiked)
                 .likeCnt(post.getLikeCount())
                 .commentCnt(post.getCommentCount());
 
@@ -56,5 +59,10 @@ public class PostResponseDto {
         }
 
         return builder.build();
+    }
+
+    // isLiked 값을 받지 않는 fromEntity 메서드
+    public static PostResponseDto fromEntity(Post post, Long memberId) {
+        return fromEntity(post, memberId, null);
     }
 }
