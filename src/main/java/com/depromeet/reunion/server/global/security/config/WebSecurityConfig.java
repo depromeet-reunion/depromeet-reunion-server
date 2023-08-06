@@ -41,7 +41,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().cors()
                 .and().csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/", "/health", "/sign-up", "/swagger-ui/*", "/v3/api-docs/*","/api/member-groups/**").permitAll()
+                .requestMatchers("/", "/health", "/sign-up", "/swagger-ui/*", "/v3/api-docs/*","/api/member-groups/**","/reissue").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin().disable()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/")
