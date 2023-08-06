@@ -1,17 +1,13 @@
 package com.depromeet.reunion.server.domain.post.dto.response;
 
 
-import com.depromeet.reunion.server.domain.comment.dto.response.CommentResponseDto;
 import com.depromeet.reunion.server.domain.member.dto.MemberResponseDto;
 import com.depromeet.reunion.server.domain.post.entity.Post;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
+
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Getter
 @Builder

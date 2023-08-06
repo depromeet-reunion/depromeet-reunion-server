@@ -36,7 +36,8 @@ public class PostController {
     })
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable("postId") Long postId, @ReqMember Member member) {
-        return ResponseDto.ok(postService.getPostById(postId, member.getId()));
+        var response = postService.getPostById(postId, member.getId());
+        return ResponseDto.ok(response);
     }
 
     @Operation(summary = "게시글 수정", description = "게시글을 수정하고 수정된 내용을 반환합니다. 인증이 필요한 요청입니다.")
@@ -44,7 +45,8 @@ public class PostController {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     @PutMapping(value = "/{postId}", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updatePost(@PathVariable("postId") Long postId,
+    public ResponseEntity<Void> updatePost(
+            @PathVariable("postId") Long postId,
                                            @ReqMember Member member,
                                            @RequestPart(value = "postRequest") PostRequestDto postRequestDto) {
         postService.updatePost(postId, member.getId(), postRequestDto);
@@ -85,6 +87,7 @@ public class PostController {
     public ResponseEntity<List<PostListResponseDto>> getMyPosts(
             @ReqMember Member member
             ) {
-        return ResponseDto.ok(postService.getMyPosts(member.getId()));
+        var response =postService.getMyPosts(member.getId());
+        return ResponseDto.ok(response);
     }
 }

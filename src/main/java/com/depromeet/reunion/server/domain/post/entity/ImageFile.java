@@ -2,15 +2,15 @@ package com.depromeet.reunion.server.domain.post.entity;
 
 import com.depromeet.reunion.server.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
-@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "image_file")
+@Getter
 public class ImageFile extends BaseTimeEntity {
 
     @Id
@@ -24,6 +24,7 @@ public class ImageFile extends BaseTimeEntity {
     @ColumnDefault("false")
     @Column(nullable = false)
     protected boolean deleted;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;

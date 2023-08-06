@@ -38,6 +38,7 @@ public class Post extends BaseTimeEntity {
     @ColumnDefault("0")
     @Column(name = "comment_count", nullable = false)
     private Integer commentCount = 0;
+
     @ColumnDefault("0")
     @Column(name = "like_count", nullable = false)
     private Integer likeCount = 0;
@@ -74,13 +75,6 @@ public class Post extends BaseTimeEntity {
 
     // 이미지 파일과의 연결 설정 (양방향 연관관계)
     public void setImageFile(ImageFile imageFile) {
-        if (imageFile == null) {
-            if (this.imageFile != null) {
-                this.imageFile.setPost(null);
-            }
-        } else {
-            imageFile.setPost(this);
-        }
         this.imageFile = imageFile;
     }
 
