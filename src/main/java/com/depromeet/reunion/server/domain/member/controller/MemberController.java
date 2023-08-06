@@ -17,7 +17,10 @@ import java.util.List;
 public class MemberController {
     private final PostService postService;
     @GetMapping("/posts/me/{memberId}")
-    public ResponseEntity<List<PostListResponseDto>> getMyPosts(@PathVariable("memberId") Long memberId) {
-        return ResponseEntity.ok(postService.getMyPosts(memberId));
+    public ResponseEntity<List<PostListResponseDto>> getMyPosts(
+            @PathVariable("memberId") Long memberId
+    ) {
+        var response = postService.getMyPosts(memberId);
+        return ResponseEntity.ok(response);
     }
 }

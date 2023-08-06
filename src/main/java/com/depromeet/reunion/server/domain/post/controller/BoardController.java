@@ -44,8 +44,11 @@ public class BoardController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardResponseDto.class)))),
     })
     @PostMapping
-    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto, @ReqMember Member member) {
-        return ResponseDto.ok(boardService.createBoard(boardRequestDto, member.getId()));
+    public ResponseEntity<BoardResponseDto> createBoard(
+            @RequestBody BoardRequestDto boardRequestDto,
+            @ReqMember Member member) {
+        var response = boardService.createBoard(boardRequestDto, member.getId());
+        return ResponseDto.ok(response);
     }
 
 
@@ -59,7 +62,8 @@ public class BoardController {
     })
     @GetMapping
     public ResponseEntity<List<BoardResponseDto>> getAllBoards() {
-        return ResponseDto.ok(boardService.getAllBoards());
+        var response = boardService.getAllBoards();
+        return ResponseDto.ok(response);
     }
 
     /**
@@ -71,8 +75,12 @@ public class BoardController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = PostListResponseDto.class)))),
     })
     @GetMapping("/{boardId}/posts")
-    public ResponseEntity<List<PostListResponseDto>> getPostsByBoard(@PathVariable("boardId") Long boardId, @ReqMember Member member) {
-        return ResponseDto.ok(postService.getPostsByBoard(boardId, member.getId()));
+    public ResponseEntity<List<PostListResponseDto>> getPostsByBoard(
+            @PathVariable("boardId") Long boardId,
+            @ReqMember Member member
+    ) {
+        var response = postService.getPostsByBoard(boardId, member.getId());
+        return ResponseDto.ok(response);
     }
 
     /**
@@ -84,10 +92,13 @@ public class BoardController {
                     content = @Content(schema = @Schema(implementation = PostResponseDto.class))),
     })
     @PostMapping(value = "/{boardId}/posts", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PostResponseDto> createPost(@PathVariable("boardId") Long boardId,
-                                                      @ReqMember Member member,
-                                                      @ModelAttribute PostRequestDto postRequestDto) throws IOException {
-        return ResponseDto.created(postService.createPost(boardId, member.getId(), postRequestDto));
+    public ResponseEntity<PostResponseDto> createPost(
+            @PathVariable("boardId") Long boardId,
+            @ReqMember Member member,
+            @ModelAttribute PostRequestDto postRequestDto
+    ) throws IOException {
+        var response = postService.createPost(boardId, member.getId(), postRequestDto);
+        return ResponseDto.created(response);
     }
 
 }

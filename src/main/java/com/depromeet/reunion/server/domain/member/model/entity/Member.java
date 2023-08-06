@@ -1,6 +1,5 @@
 package com.depromeet.reunion.server.domain.member.model.entity;
 
-import com.depromeet.reunion.server.domain.member.entity.PartType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,13 +27,5 @@ public class Member {
     @OneToOne(fetch = LAZY)
     @JoinColumn(nullable = false)
     private MemberGroup memberGroup;
-
-//    @Builder
-//    public Member(Long id, String name, PartType part, String unit) {
-//        this.id = id;
-//        this.name = name;
-//        this.part = part;
-//        this.unit = unit;
-//    }
 
 }

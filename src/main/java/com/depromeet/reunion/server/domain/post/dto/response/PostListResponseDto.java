@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * 게시글 목록 조회할 때 쓸 dto
@@ -20,7 +19,6 @@ public class PostListResponseDto {
     @Schema(description = "게시글 id")
     private String id;
     @Schema(description = "게시글 제목")
-
     private String title;
     @Schema(description = "게시글 내용")
     private String content;

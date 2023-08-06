@@ -28,23 +28,28 @@ public class CommentController {
 
     @Operation(summary = "댓글 목록 조회", description = "게시글에 달린 댓글 목록을 조회합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success", content = @Content(array = @ArraySchema(schema = @Schema(implementation = CommentResponseDto.class)))),
-
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = CommentResponseDto.class)))),
     })
     @GetMapping
-    public ResponseEntity<List<CommentResponseDto>> getComments(@PathVariable("postId") Long postId) {
-        return ResponseDto.ok(commentService.getCommentsByPost(postId));
+    public ResponseEntity<List<CommentResponseDto>> getComments(
+            @PathVariable("postId") Long postId
+    ) {
+        var response = commentService.getCommentsByPost(postId);
+        return ResponseDto.ok(response);
     }
 
     @Operation(summary = "댓글 생성", description = "게시글에 댓글을 작성합니다. 인증이 필요한 요청입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Success"),
     })
-    @PostMapping()
-    public ResponseEntity<CommentResponseDto> createComment(@PathVariable("postId") Long postId,
-                                                            @ReqMember Member member,
-//                                                            @PathVariable("memberId") Long memberId,
-                                                            @RequestBody CommentRequestDto commentRequestDto) {
-        return ResponseDto.created(commentService.createComment(postId, member.getId(), commentRequestDto));
+    @PostMapping
+    public ResponseEntity<CommentResponseDto> createComment(
+            @PathVariable("postId") Long postId,
+            @ReqMember Member member,
+            @RequestBody CommentRequestDto commentRequestDto
+    ) {
+        var response = commentService.createComment(postId, member.getId(), commentRequestDto);
+        return ResponseDto.created(response);
     }
 }
