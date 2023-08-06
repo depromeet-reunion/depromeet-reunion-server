@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService{
 
@@ -25,6 +24,7 @@ public class CommentServiceImpl implements CommentService{
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     @Override
+    @Transactional(readOnly = true)
     public List<CommentResponseDto> getCommentsByPost(Long postId) {
         // postId 있는지 확인
         findPost(postId);
@@ -33,6 +33,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public CommentResponseDto createComment(Long postId, Long memberId, CommentRequestDto commentRequestDto) {
         Post post = findPost(postId);
         Member member = findMember(memberId);

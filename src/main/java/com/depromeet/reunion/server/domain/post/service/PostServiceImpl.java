@@ -58,13 +58,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponseDto createPost(Long boardId, Long memberId, PostRequestDto postRequestDto, MultipartFile imagefile) {
+    public PostResponseDto createPost(Long boardId, Long memberId, PostRequestDto postRequestDto) {
         Board board = validateBoard(boardId);
         Member member = validateMember(memberId);
 
         Post post = postRepository.save(postRequestDto.toEntity(member, board));
 
-        // 이미지 s3 업로드
+        MultipartFile imagefile = postRequestDto.getImageFile();
         if (imagefile != null && !imagefile.isEmpty()) {
             try {
                 String path = amazonS3Uploader.upload(imagefile, "images");
@@ -78,10 +78,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePost(Long postId, Long memberId, PostRequestDto postRequestDto, MultipartFile newImageFile) {
+    public void updatePost(Long postId, Long memberId, PostRequestDto postRequestDto) {
         Post post = validatePost(postId);
         if (post.getMember().getId().equals(memberId)) {
             ImageFile existingImage = post.getImageFile();
+            MultipartFile newImageFile = postRequestDto.getImageFile();
             // 이미지 변경 or 없었는데 추가
             if (newImageFile != null) {
                 if (existingImage != null) {
