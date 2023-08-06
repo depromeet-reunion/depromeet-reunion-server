@@ -19,6 +19,19 @@ public class CommentResponseDto {
     private LocalDateTime createdAt;
     @Schema(description = "댓글 작성자 정보")
     private MemberResponseDto member;
+    @Schema(description = "본인 댓글인지 여부, 댓글 목록 조회할때만 나오는 필드")
+    private Boolean isMine;
+
+
+    public static CommentResponseDto fromEntity(Comment comment, Long memberId) {
+        return CommentResponseDto.builder()
+                .id(String.valueOf(comment.getId()))
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .member(MemberResponseDto.fromEntity(comment.getMember()))
+                .isMine(comment.getMember().getId().equals(memberId)) // 해당 댓글의 작성자가 현재 사용자인지 확인
+                .build();
+    }
 
     public static CommentResponseDto fromEntity(Comment comment) {
         return CommentResponseDto.builder()

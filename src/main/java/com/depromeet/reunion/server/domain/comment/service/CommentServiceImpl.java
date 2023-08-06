@@ -25,11 +25,13 @@ public class CommentServiceImpl implements CommentService{
     private final MemberRepository memberRepository;
     @Override
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> getCommentsByPost(Long postId) {
+    public List<CommentResponseDto> getCommentsByPost(Long postId, Long memberId) {
         // postId 있는지 확인
         findPost(postId);
-        List<Comment> comments = commentRepository.findByPostId(postId);
-        return comments.stream().map(CommentResponseDto::fromEntity).collect(Collectors.toList());
+        List<Comment> comments = commentRepository.findByPostIdOrderByCreatedAtDesc(postId);
+        return comments.stream()
+                .map(comment -> CommentResponseDto.fromEntity(comment, memberId)) // memberId를 추가로 넘겨주기
+                .collect(Collectors.toList());
     }
 
     @Override

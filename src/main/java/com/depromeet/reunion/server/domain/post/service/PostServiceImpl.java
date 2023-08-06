@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
         // board id 확인
         validateBoard(boardId);
         // board id로 게시글 리스트 반환
-        List<Post> posts = postRepository.findByBoardId(boardId);
+        List<Post> posts = postRepository.findByBoardIdOrderByCreatedAtDesc(boardId);
         return posts.stream().map(post -> PostListResponseDto.fromEntity(post, memberId)).toList();
     }
 
@@ -150,7 +150,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostListResponseDto> getMyPosts(Long memberId) {
         validateMember(memberId);
-        List<Post> posts = postRepository.findByMemberId(memberId);
+        List<Post> posts = postRepository.findByMemberIdOrderByCreatedAtDesc(memberId);
         return posts.stream().map(post -> PostListResponseDto.fromEntity(post, memberId)).toList();
     }
 

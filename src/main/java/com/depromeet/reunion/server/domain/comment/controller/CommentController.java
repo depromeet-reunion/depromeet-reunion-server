@@ -33,9 +33,10 @@ public class CommentController {
     })
     @GetMapping
     public ResponseEntity<List<CommentResponseDto>> getComments(
-            @PathVariable("postId") Long postId
+            @PathVariable("postId") Long postId,
+            @ReqMember Member member
     ) {
-        var response = commentService.getCommentsByPost(postId);
+        var response = commentService.getCommentsByPost(postId, member.getId());
         return ResponseDto.ok(response);
     }
 
