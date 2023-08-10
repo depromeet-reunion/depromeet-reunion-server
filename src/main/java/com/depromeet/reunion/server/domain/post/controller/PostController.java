@@ -48,7 +48,7 @@ public class PostController {
     public ResponseEntity<Void> updatePost(
             @PathVariable("postId") Long postId,
                                            @ReqMember Member member,
-                                           @RequestPart(value = "postRequest") PostRequestDto postRequestDto) {
+            @ModelAttribute PostRequestDto postRequestDto) {
         postService.updatePost(postId, member.getId(), postRequestDto);
         return ResponseDto.noContent();
     }

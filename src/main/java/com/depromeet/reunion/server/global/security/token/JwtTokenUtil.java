@@ -10,11 +10,6 @@ public class JwtTokenUtil {
     private final JwtTokenConfig jwtTokenConfig;
 
     public String getId(String token) throws Exception {
-        try {
             return jwtTokenConfig.getJwtParser().parseClaimsJws(token).getBody().get("id", String.class);
-        } catch (Exception e) {
-            throw new Exception("Invalid Token");
-        }
-
     }
 }
