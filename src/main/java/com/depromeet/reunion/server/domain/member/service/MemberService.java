@@ -6,17 +6,18 @@ import com.depromeet.reunion.server.domain.member.model.dto.request.SignupReques
 import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.member.model.entity.MemberAuth;
 import com.depromeet.reunion.server.domain.member.model.entity.MemberGroup;
+import com.depromeet.reunion.server.domain.member.model.entity.MemberStatus;
 import com.depromeet.reunion.server.domain.member.repository.MemberAuthRepository;
 import com.depromeet.reunion.server.domain.member.repository.MemberGroupRepository;
 import com.depromeet.reunion.server.domain.member.repository.MemberRepository;
 import com.depromeet.reunion.server.global.exception.BusinessException;
 import com.depromeet.reunion.server.global.exception.ErrorCode;
 import com.depromeet.reunion.server.global.security.token.JwtTokenProvider;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -55,6 +56,7 @@ public class MemberService {
 
         Member member = Member.builder()
                 .name(signupRequestDto.getName())
+                .status(MemberStatus.READY)
                 .memberAuth(memberAuth)
                 .memberGroup(memberGroup)
                 .build();
