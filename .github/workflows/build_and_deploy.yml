@@ -34,7 +34,7 @@ jobs:
           username: ${{ vars.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "build/libs/*.jar"
-          target: "${{ vars.SSH_REMOTE_JAR_PATH }}/${{ GITHUB_SHA }}.jar"
+          target: "${{ vars.SSH_REMOTE_JAR_PATH }}/${GITHUB_SHA}.jar"
   deploy:
     needs: transfer
     runs-on: ubuntu-latest
