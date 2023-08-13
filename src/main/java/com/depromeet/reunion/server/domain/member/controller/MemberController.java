@@ -2,6 +2,7 @@ package com.depromeet.reunion.server.domain.member.controller;
 
 import com.depromeet.reunion.server.domain.member.dto.MemberResponseDto;
 import com.depromeet.reunion.server.domain.member.model.entity.Member;
+import com.depromeet.reunion.server.domain.member.service.MemberService;
 import com.depromeet.reunion.server.global.annotation.ReqMember;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 public class MemberController {
+    private final MemberService memberService;
 
     @Operation(summary = "내 정보 조회", description = "이름, 기수, 파트 등의 내 정보를 반환합니다. 인증이 필요한 요청입니다.")
     @ApiResponses(value = {
@@ -29,6 +31,6 @@ public class MemberController {
     })
     @GetMapping("/me")
     public ResponseEntity<MemberResponseDto> getMyInfo(@ReqMember Member member) {
-        return ResponseEntity.ok(MemberResponseDto.fromEntity(member));
+        return ResponseEntity.ok(memberService.getMember(member.getId()));
     }
 }

@@ -1,6 +1,7 @@
 package com.depromeet.reunion.server.domain.member.service;
 
 import com.depromeet.reunion.server.auth.model.dto.resonse.JwtTokenResponseDto;
+import com.depromeet.reunion.server.domain.member.dto.MemberResponseDto;
 import com.depromeet.reunion.server.domain.member.event.UserJoinEvent;
 import com.depromeet.reunion.server.domain.member.model.dto.request.SignupRequestDto;
 import com.depromeet.reunion.server.domain.member.model.entity.Member;
@@ -70,5 +71,12 @@ public class MemberService {
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getId().toString());
 
         return new JwtTokenResponseDto(accessToken, refreshToken);
+    }
+
+    @Transactional(readOnly = true)
+    public MemberResponseDto getMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_VALID_MEMBER));
+        return MemberResponseDto.fromEntity(member);
     }
 }
