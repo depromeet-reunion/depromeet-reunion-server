@@ -22,10 +22,8 @@ jobs:
         uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: build
-  transfer:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
+      - name: Rename file
+        run: cp build/libs/*.jar ${{ github.sha }}.jar
       - name: Transfer files via SSH
         uses: appleboy/scp-action@master
         with:
@@ -33,10 +31,10 @@ jobs:
           port: ${{ vars.SSH_PORT }}
           username: ${{ vars.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build/libs/*.jar"
-          target: "${{ vars.SSH_REMOTE_JAR_PATH }}/${{ GITHUB_SHA }}.jar"
+          source: ${{ github.sha }}.jar
+          target: ${{ vars.SSH_REMOTE_JAR_PATH }}
   deploy:
-    needs: transfer
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Executing remote ssh commands using ssh key
