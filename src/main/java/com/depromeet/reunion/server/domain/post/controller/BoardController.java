@@ -41,7 +41,7 @@ public class BoardController {
     @Operation(summary = "게시판 생성", description = "새로운 게시판을 생성합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardResponseDto.class)))),
+                    content = @Content(schema = @Schema(implementation = BoardResponseDto.class))),
     })
     @PostMapping
     public ResponseEntity<BoardResponseDto> createBoard(

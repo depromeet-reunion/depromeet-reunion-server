@@ -5,7 +5,6 @@ import com.depromeet.reunion.server.domain.member.model.entity.Member;
 import com.depromeet.reunion.server.domain.member.service.MemberService;
 import com.depromeet.reunion.server.global.annotation.ReqMember;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +26,7 @@ public class MemberController {
     @Operation(summary = "내 정보 조회", description = "이름, 기수, 파트 등의 내 정보를 반환합니다. 인증이 필요한 요청입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = MemberResponseDto.class)))),
+                    content = @Content(schema = @Schema(implementation = MemberResponseDto.class))),
     })
     @GetMapping("/me")
     public ResponseEntity<MemberResponseDto> getMyInfo(@ReqMember Member member) {
