@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/members/{memberId}")
+@RequestMapping("/api/v1/members/{memberId}")
 @RequiredArgsConstructor
 public class MemberScreeningController {
     private final MemberScreeningService memberScreeningService;
