@@ -1,7 +1,6 @@
 package com.depromeet.reunion.server.domain.member.controller;
 
 import com.depromeet.reunion.server.domain.member.service.MemberGroupService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +27,5 @@ public class MemberGroupController {
         var response = memberGroupService.getAllUnit();
         return ResponseEntity.ok(response);
     }
-
 
 }

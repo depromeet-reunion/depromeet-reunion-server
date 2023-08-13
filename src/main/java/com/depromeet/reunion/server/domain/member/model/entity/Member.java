@@ -20,6 +20,12 @@ public class Member {
     @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status = MemberStatus.READY;
+
+    @Enumerated(EnumType.STRING)
+    private MemberScreeningStatus screeningStatus = MemberScreeningStatus.SUBMITTED;
+
     @OneToOne(fetch = LAZY)
     @JoinColumn(nullable = false)
     private MemberAuth memberAuth;
@@ -27,5 +33,20 @@ public class Member {
     @OneToOne(fetch = LAZY)
     @JoinColumn(nullable = false)
     private MemberGroup memberGroup;
+
+    public void setScreeningStatusApproved() {
+        if (status == MemberStatus.READY && screeningStatus != MemberScreeningStatus.SUBMITTED) {
+            return;
+        }
+        this.status = MemberStatus.MEMBER;
+        this.screeningStatus = MemberScreeningStatus.APPROVED;
+    }
+
+    public void setScreeningStatusRejected() {
+        if (screeningStatus != MemberScreeningStatus.SUBMITTED) {
+            return;
+        }
+        this.screeningStatus = MemberScreeningStatus.REJECTED;
+    }
 
 }
