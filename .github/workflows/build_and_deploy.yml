@@ -23,7 +23,7 @@ jobs:
         with:
           arguments: build
       - name: Rename file
-        run: cp build/libs/*.jar ./$GITHUB_SHA.jar
+        run: cp build/libs/*.jar ${{ github.sha }}.jar
       - name: Transfer files via SSH
         uses: appleboy/scp-action@master
         with:
@@ -31,7 +31,7 @@ jobs:
           port: ${{ vars.SSH_PORT }}
           username: ${{ vars.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: ./$GITHUB_SHA.jar
+          source: ${{ github.sha }}.jar
           target: ${{ vars.SSH_REMOTE_JAR_PATH }}
   deploy:
     needs: build
